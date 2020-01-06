@@ -1,32 +1,34 @@
-apiVersion: v1
-kind: Service
-metadata:
-  name: echo1
-spec:
-  ports:
-    - port: 80
-      targetPort: 5678
-  selector:
-    app: echo1
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: echo1
+  name: kuard
 spec:
   selector:
     matchLabels:
-      app: echo1
-  replicas: 2
+      app: kuard
+  replicas: 1
   template:
     metadata:
       labels:
-        app: echo1
+        app: kuard
     spec:
       containers:
-        - name: echo1
-          image: hashicorp/http-echo
-          args:
-            - "-text=echo1"
+        - image: gcr.io/kuar-demo/kuard-amd64:1
+          imagePullPolicy: Always
+          name: kuard
           ports:
-            - containerPort: 5678
+            - containerPort: 8080
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: kuard
+spec:
+  ports:
+    - port: 80
+      targetPort: 8080
+      protocol: TCP
+  selector:
+    app: kuard
