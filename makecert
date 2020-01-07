@@ -1,0 +1,2 @@
+openssl req -x509 -newkey rsa:4096 -sha256 -nodes -keyout tls.key -out tls.cert -subj "/CN=echo.example.com" -days 365
+kubectl create secret tls echo-example-com-tls --cert=tls.cert --key=tls.key
